@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Bionica - LA REAL</title>
+
+    <meta property="og:title" content="Propuesta Bionica - LA REAL">
+    <meta property="og:description" content="Puesta a Punto + Gestión de Ecommerce">
+    <meta property="og:type" content="website">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0D1B2A;
+            color: #1a1a1a;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .presentation { width: 100vw; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 100px 80px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            overflow: hidden;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+        .slide > * { position: relative; z-index: 2; }
+
+        .slide-centered { justify-content: center; padding-top: 80px; }
+
+        .slide-dark { background: #0D1B2A; color: #ffffff; }
+        .slide-dark::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(74,222,128,0.06) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(59,130,246,0.04) 0%, transparent 50%);
+            pointer-events: none; z-index: 1;
+        }
+
+        .slide-light { background: #F5F0EB; color: #1a1a1a; }
+        .slide-light::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 80% 20%, rgba(74,222,128,0.04) 0%, transparent 50%);
+            pointer-events: none; z-index: 1;
+        }
+
+        h1 { font-size: 72px; font-weight: 900; line-height: 1.0; letter-spacing: -3px; max-width: 1000px; text-align: center; margin-bottom: 30px; }
+        h2 { font-size: 52px; font-weight: 900; line-height: 1.1; letter-spacing: -2px; max-width: 900px; text-align: center; margin-bottom: 40px; }
+        h3 { font-size: 28px; font-weight: 600; text-align: center; margin-bottom: 20px; letter-spacing: -0.5px; }
+
+        .highlight { color: #4ADE80; }
+        .slide-light .highlight { color: #16a34a; }
+
+        .subtitle { font-size: 20px; color: #94A3B8; text-align: center; max-width: 600px; line-height: 1.6; font-weight: 400; }
+        .slide-light .subtitle { color: #6b7280; }
+
+        .section-tag { font-size: 12px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 24px; padding: 8px 20px; border-radius: 50px; }
+        .slide-dark .section-tag { color: #4ADE80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); }
+        .slide-light .section-tag { color: #0D1B2A; background: rgba(13,27,42,0.06); border: 1px solid rgba(13,27,42,0.1); }
+
+        /* Pain grid */
+        .pain-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px; max-width: 800px; width: 100%; }
+        .pain-card { background: #fff; border-radius: 16px; padding: 28px 24px; display: flex; align-items: flex-start; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .pain-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 16px 40px rgba(0,0,0,0.08); }
+        .pain-icon { width: 36px; height: 36px; border-radius: 10px; background: #FEE2E2; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .pain-icon-blue { background: #DBEAFE; }
+        .pain-icon-yellow { background: #FEF3C7; }
+        .pain-icon-green { background: #DCFCE7; }
+        .pain-text { font-size: 16px; font-weight: 500; color: #374151; line-height: 1.4; }
+
+        /* Metrics row */
+        .metrics-row { display: flex; gap: 60px; margin-top: 50px; justify-content: center; }
+        .metric { text-align: center; }
+        .metric-value { font-size: 80px; font-weight: 900; letter-spacing: -4px; line-height: 1; margin-bottom: 12px; }
+        .slide-dark .metric-value { color: #4ADE80; }
+        .slide-light .metric-value { color: #0D1B2A; }
+        .metric-label { font-size: 14px; font-weight: 500; max-width: 200px; line-height: 1.4; }
+        .slide-dark .metric-label { color: #94A3B8; }
+        .slide-light .metric-label { color: #6b7280; }
+
+        /* Motor grid (Método REAL) */
+        .motor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; max-width: 1000px; width: 100%; }
+        .motor-card { background: #fff; border-radius: 20px; padding: 32px 24px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .motor-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 20px 50px rgba(0,0,0,0.1); }
+        .motor-letter { font-size: 48px; font-weight: 900; color: #0D1B2A; letter-spacing: -2px; line-height: 1; }
+        .motor-name { font-size: 16px; font-weight: 800; color: #16a34a; letter-spacing: -0.5px; }
+        .motor-concept { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 2px; }
+        .motor-desc { font-size: 14px; font-weight: 500; color: #6b7280; line-height: 1.4; }
+
+        /* Feature layout (R-E-A-L slides) */
+        .feature-layout { display: flex; align-items: flex-start; gap: 60px; max-width: 1000px; width: 100%; margin-top: 30px; }
+        .feature-left { flex: 1; }
+        .feature-right { flex: 1; }
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 500; color: #374151; line-height: 1.5; }
+        .feature-check { width: 22px; height: 22px; background: #DCFCE7; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #166534; flex-shrink: 0; margin-top: 2px; }
+        .feature-card { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04); }
+        .feature-card-title { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; }
+        .feature-card-value { font-size: 48px; font-weight: 900; letter-spacing: -2px; color: #0D1B2A; line-height: 1; }
+        .feature-card-label { font-size: 14px; font-weight: 500; color: #6b7280; margin-top: 8px; }
+
+        /* Pricing card */
+        .pricing-card { background: #fff; border-radius: 24px; padding: 48px 60px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.08); max-width: 500px; width: 100%; margin-top: 30px; }
+        .pricing-value { font-size: 72px; font-weight: 900; letter-spacing: -3px; color: #0D1B2A; line-height: 1; }
+        .pricing-currency { font-size: 16px; font-weight: 600; color: #9ca3af; margin-top: 8px; }
+        .pricing-note { font-size: 14px; font-weight: 500; color: #6b7280; margin-top: 24px; line-height: 1.5; }
+
+        /* Monthly layout */
+        .monthly-layout { display: flex; gap: 40px; margin-top: 30px; max-width: 900px; width: 100%; }
+        .monthly-card { flex: 1; background: #fff; border-radius: 20px; padding: 32px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04); }
+        .monthly-card-title { font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #9ca3af; margin-bottom: 16px; }
+        .monthly-card-value { font-size: 48px; font-weight: 900; letter-spacing: -2px; color: #0D1B2A; line-height: 1; }
+        .monthly-card-label { font-size: 14px; font-weight: 500; color: #6b7280; margin-top: 12px; line-height: 1.5; }
+        .monthly-includes { margin-top: 24px; text-align: left; }
+        .monthly-includes-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #9ca3af; margin-bottom: 12px; }
+        .monthly-includes-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .monthly-includes-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #374151; }
+        .monthly-check { width: 18px; height: 18px; background: #DCFCE7; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #166534; flex-shrink: 0; }
+
+        /* Hero pills */
+        .hero-pills { display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+        .hero-pill { display: flex; align-items: center; gap: 10px; padding: 12px 24px; border: 1px solid rgba(22,163,74,0.3); border-radius: 50px; font-size: 15px; font-weight: 600; color: #374151; background: rgba(22, 163, 74, 0.06); box-shadow: 0 0 20px rgba(22, 163, 74, 0.08); opacity: 0; transform: translateY(20px); animation: pillFadeIn 0.6s ease forwards; }
+        .hero-pill:nth-child(1) { animation-delay: 0.3s; }
+        .hero-pill:nth-child(2) { animation-delay: 0.5s; }
+        .hero-pill:nth-child(3) { animation-delay: 0.7s; }
+        .pill-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* FAQ */
+        .faq-container { display: flex; flex-direction: column; gap: 16px; max-width: 800px; width: 100%; }
+        .faq-card { background: #fff; border-radius: 16px; padding: 24px 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.03); }
+        .faq-question { font-size: 17px; font-weight: 800; color: #0D1B2A; margin-bottom: 10px; }
+        .faq-answer { font-size: 15px; font-weight: 500; color: #6b7280; line-height: 1.5; }
+
+        /* Navigation */
+        .navigation { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 10px; z-index: 100; }
+        .nav-btn { width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; font-size: 18px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .nav-btn:hover { background: #4ADE80; color: #0D1B2A; border-color: #4ADE80; }
+
+        .progress { position: fixed; bottom: 0; left: 0; height: 3px; background: #4ADE80; transition: width 0.3s ease; z-index: 200; }
+        .slide-counter { position: fixed; bottom: 38px; left: 30px; font-size: 13px; font-weight: 500; color: #64748B; z-index: 100; transition: color 0.5s ease; letter-spacing: 1px; }
+        .fullscreen-hint { position: fixed; top: 30px; right: 30px; font-size: 11px; font-weight: 500; color: #64748B; z-index: 100; transition: color 0.5s ease; letter-spacing: 0.5px; }
+
+        @keyframes pillFadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; letter-spacing: -1.5px; margin-bottom: 20px; }
+            h2 { font-size: 26px; letter-spacing: -1px; margin-bottom: 20px; }
+            h3 { font-size: 20px; }
+            .slide { padding: 80px 20px 20px !important; overflow-y: auto; justify-content: flex-start !important; }
+            .slide-centered { justify-content: center !important; }
+            .subtitle { font-size: 16px; max-width: 100%; }
+            .section-tag { font-size: 10px; letter-spacing: 3px; padding: 6px 14px; margin-bottom: 16px; }
+
+            .pain-grid { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+            .pain-card { padding: 18px 16px; }
+            .pain-text { font-size: 14px; }
+
+            .metrics-row { flex-direction: column; gap: 20px; margin-top: 30px; }
+            .metric-value { font-size: 48px; letter-spacing: -2px; }
+            .metric-label { font-size: 13px; }
+
+            .motor-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+            .motor-card { padding: 20px 16px; }
+            .motor-letter { font-size: 36px; }
+            .motor-desc { font-size: 13px; }
+
+            .feature-layout { flex-direction: column; gap: 24px; }
+            .feature-card-value { font-size: 36px; }
+
+            .pricing-card { padding: 32px 24px; }
+            .pricing-value { font-size: 48px; }
+
+            .monthly-layout { flex-direction: column; gap: 20px; }
+            .monthly-card-value { font-size: 36px; }
+
+            .hero-pills { flex-direction: column; align-items: center; gap: 10px; margin-top: 24px; }
+            .hero-pill { font-size: 13px; padding: 10px 18px; }
+
+            .faq-card { padding: 18px 20px; }
+            .faq-question { font-size: 15px; }
+            .faq-answer { font-size: 14px; }
+
+            .navigation { bottom: 16px; right: 16px; gap: 8px; }
+            .nav-btn { width: 38px; height: 38px; font-size: 16px; border-radius: 10px; }
+            .slide-counter { bottom: 22px; left: 16px; font-size: 11px; }
+            .fullscreen-hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <div class="progress" id="progress"></div>
+        <div class="slide-counter" id="slideCounter">1 / 13</div>
+        <div class="fullscreen-hint" id="fullscreenHint">Presiona F para pantalla completa</div>
+
+        <!-- ===================== SLIDE 1: PORTADA (LIGHT) ===================== -->
+        <div class="slide slide-light slide-centered active" id="slide1">
+            <img src="logo-bionica.png" alt="Bionica" style="height: 80px; width: auto; margin-bottom: 50px;">
+            <h1>Tu marca merece <span class="highlight">vender tanto como enamora</span></h1>
+            <p class="subtitle">Propuesta de Puesta a Punto + Gestión de Ecommerce</p>
+            <div class="hero-pills">
+                <div class="hero-pill">
+                    <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Estrategia REAL
+                </div>
+                <div class="hero-pill">
+                    <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Pauta + Email Marketing
+                </div>
+                <div class="hero-pill">
+                    <svg class="pill-icon" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    30 días de implementación
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 2: EL PROBLEMA (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide2">
+            <span class="section-tag">El reto actual</span>
+            <h2>Un retorno saludable no basta si estás <span class="highlight">estancado</span></h2>
+            <div class="pain-grid">
+                <div class="pain-card">
+                    <div class="pain-icon">📉</div>
+                    <div class="pain-text">Ventas estancadas en $30-35M a pesar de un retorno saludable (ROAS 7x)</div>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon pain-icon-blue">👕</div>
+                    <div class="pain-text">130 SKUs sin foco claro en categorías estrella ni profundidad de inventario</div>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon pain-icon-yellow">🎬</div>
+                    <div class="pain-text">Contenido irregular y sin estrategia audiovisual constante para pauta</div>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon pain-icon-green">📧</div>
+                    <div class="pain-text">Sin automatizaciones de email marketing ni plan de recompra activo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 3: LA OPORTUNIDAD (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide3">
+            <span class="section-tag">La oportunidad</span>
+            <h2>Tienes los números para <span class="highlight">escalar en grande</span></h2>
+            <div class="metrics-row">
+                <div class="metric">
+                    <div class="metric-value">7x</div>
+                    <div class="metric-label">ROAS actual: muy por encima del promedio de tu industria</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">60%</div>
+                    <div class="metric-label">Margen bruto que respalda una inversión más agresiva en pauta</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">2x</div>
+                    <div class="metric-label">Potencial de ventas duplicando inversión con estrategia correcta</div>
+                </div>
+            </div>
+            <p class="subtitle" style="margin-top: 40px;">
+                El reto no es tu retorno. Es desbloquear el crecimiento sin perderlo.
+            </p>
+        </div>
+
+        <!-- ===================== SLIDE 4: MÉTODO REAL (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide4">
+            <span class="section-tag">La solución</span>
+            <h2>Método <span class="highlight">REAL</span> adaptado a Bionica</h2>
+            <p class="subtitle" style="margin-bottom: 10px;">Los cuatro motores que mueven las ventas de un negocio de ecommerce</p>
+            <div class="motor-grid">
+                <div class="motor-card">
+                    <div class="motor-letter">R</div>
+                    <div class="motor-name">Revenue</div>
+                    <div class="motor-concept">Atracción</div>
+                    <div class="motor-desc">Pauta en Meta con estrategia de contenido y ángulos de venta por categoría</div>
+                </div>
+                <div class="motor-card">
+                    <div class="motor-letter">E</div>
+                    <div class="motor-name">Eficiencia</div>
+                    <div class="motor-concept">Conversión</div>
+                    <div class="motor-desc">Optimización de Shopify: fichas, velocidad, colecciones y experiencia de compra</div>
+                </div>
+                <div class="motor-card">
+                    <div class="motor-letter">A</div>
+                    <div class="motor-name">Amplificación</div>
+                    <div class="motor-concept">Ticket</div>
+                    <div class="motor-desc">Categorías estrella, combos, pricing inteligente y plan de escalamiento de pauta</div>
+                </div>
+                <div class="motor-card">
+                    <div class="motor-letter">L</div>
+                    <div class="motor-name">Lealtad</div>
+                    <div class="motor-concept">Retención</div>
+                    <div class="motor-desc">Email marketing, flows automáticos, segmentación y fidelización tienda → ecommerce</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 5: R - REVENUE (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide5">
+            <span class="section-tag">R — Revenue</span>
+            <h2>Estrategia de <span class="highlight">Contenido y Pauta</span></h2>
+            <div class="feature-layout">
+                <div class="feature-left">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Diagnóstico completo de pauta actual en Meta
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Análisis de competencia y referentes del sector moda
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Plan de contenido enfocado en categorías estrella (camisetas + sets)
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Guiones de video para Sergio como embajador de marca
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Ángulos de venta por categoría (souvenir, básicos, moda)
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-card">
+                        <div class="feature-card-title">Entregable clave</div>
+                        <div class="feature-card-value" style="font-size: 36px;">Playbook</div>
+                        <div class="feature-card-label">de contenido con ángulos de venta para Camisetas, Sets, Básicos y Souvenir</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 6: E - EFICIENCIA (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide6">
+            <span class="section-tag">E — Eficiencia</span>
+            <h2>Optimización web para <span class="highlight">más conversión</span></h2>
+            <div class="feature-layout">
+                <div class="feature-left">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Auditoría completa del sitio Shopify actual
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Optimización de fichas de producto y colecciones
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Mejora de velocidad de carga y experiencia de compra
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Landing pages para categorías clave
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Estrategia de pop-ups y captación de leads
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-card">
+                        <div class="feature-card-title">Objetivo</div>
+                        <div class="feature-card-value">+30%</div>
+                        <div class="feature-card-label">mínimo en tasa de conversión con optimizaciones de sitio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 7: A - AMPLIFICACIÓN (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide7">
+            <span class="section-tag">A — Amplificación</span>
+            <h2>Categorías estrella + <span class="highlight">Rentabilidad</span></h2>
+            <div class="feature-layout">
+                <div class="feature-left">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Taller de números: costos unitarios, márgenes reales, punto de equilibrio
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Identificar 8-10 categorías/SKUs estrella para profundizar inventario
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Estrategia de combos y kits por categoría
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Pricing inteligente: productos gancho vs productos rentables
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Plan de escalamiento progresivo de inversión en pauta (de 4M hacia 8-10M)
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-card">
+                        <div class="feature-card-title">Meta de margen neto</div>
+                        <div class="feature-card-value">20%</div>
+                        <div class="feature-card-label">mínimo después de costos y pauta</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 8: L - LEALTAD (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide8">
+            <span class="section-tag">L — Lealtad</span>
+            <h2>Convertir clientes en <span class="highlight">fans</span></h2>
+            <div class="feature-layout">
+                <div class="feature-left">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Configuración de Shopify Email como canal de recompra
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Flows automáticos: bienvenida, carrito abandonado, post-compra
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Segmentación de base de clientes (recompra, valor alto, inactivos)
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Plan de fidelización para clientes de tiendas físicas → ecommerce
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            Pop-up de captación + secuencia de nurturing
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-card">
+                        <div class="feature-card-title">Ciclo de recompra</div>
+                        <div class="feature-card-value">45d</div>
+                        <div class="feature-card-label">potencial de recompra en moda con estrategia de email activa</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 9: SEPARADOR INVERSIÓN (DARK) ===================== -->
+        <div class="slide slide-dark slide-centered" id="slide9">
+            <span class="section-tag">Inversión</span>
+            <h1>Puesta a <span class="highlight">Punto</span></h1>
+            <p class="subtitle">Todo lo que necesitas para desbloquear el crecimiento de Bionica</p>
+        </div>
+
+        <!-- ===================== SLIDE 10: PRECIO PUESTA A PUNTO (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide10">
+            <span class="section-tag">Inversión</span>
+            <h2>Puesta a Punto <span class="highlight">Bionica</span></h2>
+            <div class="pricing-card">
+                <div class="pricing-value">$3.900.000</div>
+                <div class="pricing-currency">COP + IVA</div>
+                <div class="pricing-note">
+                    Incluye los 4 módulos del Método REAL<br>
+                    Diagnóstico + Plan de acción<br>
+                    Implementación en 30 días
+                </div>
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.08);">
+                    <div style="font-size: 13px; font-weight: 600; color: #374151;">Forma de pago: <strong>Pago único para arrancar</strong></div>
+                </div>
+                <div style="font-size: 12px; font-weight: 500; color: #9ca3af; margin-top: 12px;">Propuesta vigente hasta el <strong style="color: #DC2626;">28 de febrero de 2026</strong></div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 11: GESTIÓN MENSUAL (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide11">
+            <span class="section-tag">Gestión mensual</span>
+            <h2>Gestión Mensual del <span class="highlight">Ecommerce</span></h2>
+            <div class="monthly-layout">
+                <div class="monthly-card">
+                    <div class="monthly-card-title">Fee mensual</div>
+                    <div class="monthly-card-value">$2M</div>
+                    <div class="monthly-card-label">COP + IVA</div>
+                    <div class="monthly-includes">
+                        <div class="monthly-includes-title">Incluye</div>
+                        <ul class="monthly-includes-list">
+                            <li><span class="monthly-check">✓</span> Gestión de pauta (Meta)</li>
+                            <li><span class="monthly-check">✓</span> Email marketing y automatizaciones</li>
+                            <li><span class="monthly-check">✓</span> Contenido para pauta y web (hasta 40 piezas/mes)</li>
+                            <li><span class="monthly-check">✓</span> Optimizaciones constantes en Shopify</li>
+                            <li><span class="monthly-check">✓</span> Sesión quincenal + reportes semanales WhatsApp</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="monthly-card">
+                    <div class="monthly-card-title">Comisión sobre ventas</div>
+                    <div class="monthly-card-value">8%</div>
+                    <div class="monthly-card-label">Sobre ventas netas del ecommerce</div>
+                    <div class="monthly-includes">
+                        <div class="monthly-includes-title">Escala por volumen</div>
+                        <ul class="monthly-includes-list">
+                            <li><span class="monthly-check">✓</span> <strong>8%</strong> hasta $25M/mes en ventas</li>
+                            <li><span class="monthly-check">✓</span> <strong>5%</strong> a partir de $25M/mes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 12: FAQ (LIGHT) ===================== -->
+        <div class="slide slide-light" id="slide12" style="padding-top: 80px;">
+            <span class="section-tag">Preguntas frecuentes</span>
+            <h2 style="margin-bottom: 24px;">Resolvemos tus <span class="highlight">dudas</span></h2>
+            <div class="faq-container">
+                <div class="faq-card">
+                    <div class="faq-question">¿Qué incluye la puesta a punto?</div>
+                    <div class="faq-answer">Diagnóstico de pauta, web, email marketing. Taller de números. Plan de categorías estrella. Implementación en 30 días.</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">¿Ustedes crean el contenido?</div>
+                    <div class="faq-answer">LA REAL diseña la estrategia, guiones y ángulos de venta. Bionica produce con nuestro acompañamiento. Las piezas para pauta las creamos nosotros.</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">¿Y si no veo resultados?</div>
+                    <div class="faq-answer">Si ejecutas las tareas al 100% y no ves mejoras en los motores, trabajamos contigo gratis hasta subir mínimo 10% en cada motor.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== SLIDE 13: CIERRE (DARK) ===================== -->
+        <div class="slide slide-dark slide-centered" id="slide13">
+            <img src="logo-la-real.png" alt="LA REAL" style="width: 120px; margin-bottom: 50px; opacity: 0.9;">
+            <h1 style="font-size: 56px;">Bionica ya enamora. Ahora es momento de <span class="highlight">vender en grande</span>.</h1>
+            <p class="subtitle" style="margin-top: 20px; font-size: 20px;">
+                Hablemos de cómo desbloquear el crecimiento de Bionica.
+            </p>
+        </div>
+
+        <!-- Nav -->
+        <div class="navigation">
+            <button class="nav-btn" onclick="prevSlide()">&#8592;</button>
+            <button class="nav-btn" onclick="nextSlide()">&#8594;</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 13;
+
+        function showSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const slide = document.getElementById(`slide${n}`);
+            slide.classList.add('active');
+            document.getElementById('slideCounter').textContent = `${n} / ${totalSlides}`;
+            document.getElementById('progress').style.width = `${(n / totalSlides) * 100}%`;
+
+            const isLight = slide.classList.contains('slide-light');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.style.background = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.1)';
+                btn.style.borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)';
+                btn.style.color = isLight ? '#374151' : '#fff';
+            });
+            document.getElementById('slideCounter').style.color = isLight ? '#9ca3af' : '#64748B';
+            document.getElementById('fullscreenHint').style.color = isLight ? '#9ca3af' : '#64748B';
+            document.getElementById('progress').style.background = isLight ? '#0D1B2A' : '#4ADE80';
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides) { currentSlide++; showSlide(currentSlide); } }
+        function prevSlide() { if (currentSlide > 1) { currentSlide--; showSlide(currentSlide); } }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+            else if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+        });
+
+        document.querySelector('.presentation').addEventListener('click', (e) => {
+            if (!e.target.closest('.navigation')) nextSlide();
+        });
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        }
+
+        showSlide(1);
+    </script>
+</body>
+</html>
